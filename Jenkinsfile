@@ -6,7 +6,7 @@ pipeline {
         IMG = 'mkevin-docker'
         VER = '0.0.1'
         JAR = 'mkevin-docker-0.0.1-SNAPSHOT'
-        SOURCE_DIR = 'usr/local/Cellar/maven/3.6.0/libexec/repo/net/mkevin/mkevin-docker/0.0.1-SNAPSHOT/'
+        SOURCE_DIR = '/usr/local/Cellar/maven/3.6.0/libexec/repo/net/mkevin/mkevin-docker/0.0.1-SNAPSHOT/'
         BUILD_DIR = '/Applications/devtools/docker_project/jenkins_home/docker/build/'
         CLASS_DIR = '/Applications/devtools/docker_project/jenkins_home/workspace/empty/target/classes'
       }
@@ -44,7 +44,7 @@ pipeline {
                     docker push localhost:5000/${IMG}:${VER}
                     docker logout localhost:5000
                     docker rm -f ${IMG}
-                    docker run --name ${IMG} -p 8080:8080 -d 10.1.18.202:5000/${IMG}:${VER}
+                    docker run --name ${IMG} -p 8082:8080 -d localhost:5000/${IMG}:${VER}
                 '''
             }
         }
