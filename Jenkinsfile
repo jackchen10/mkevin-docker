@@ -4,13 +4,13 @@ pipeline {
       agent any
 
       environment {
-        MVN_PATH = '/var/maven_home/bin/mvn'
+        MVN_PATH = '/usr/local/Cellar/maven/3.6.0/libexec/bin/mvn'
         IMG = 'mkevin-docker'
         VER = '0.0.1'
         JAR = 'mkevin-docker-0.0.1-SNAPSHOT'
-        SOURCE_DIR = '/var/maven_home/repo/net/mkevin/mkevin-docker/0.0.1-SNAPSHOT/'
-        BUILD_DIR = '/var/jenkins_home/docker/build/'
-        CLASS_DIR = '/var/jenkins_home/workspace/empty/target/classes'
+        SOURCE_DIR = '/usr/local/Cellar/maven/3.6.0/libexec/repo/net/mkevin/mkevin-docker/0.0.1-SNAPSHOT/'
+        BUILD_DIR = '/Applications/devtools/docker_project/jenkins_home/docker/build/'
+        CLASS_DIR = '/Applications/devtools/docker_project/jenkins_home/workspace/empty/target/classes'
       }
 
       //阶段
@@ -19,7 +19,7 @@ pipeline {
 		stage('pull git') {
 			steps{
 			    /*从git拉取代码，可实用工具生成*/
-				git credentialsId: '2226cf56-8ea7-4515-b0d0-c0f4090e87fb', url: 'https://gitee.com/mimaxueyuan/mkevin-docker.git'
+				git credentialsId: 'a4760f62-b4b6-49f1-93f2-4f760613271c', url: 'https://github.com/jackchen10/mkevin-docker.git'
 			}
 
 		}
@@ -39,12 +39,12 @@ pipeline {
                 sh 'cp ${CLASS_DIR}/Dockerfile ${BUILD_DIR}'
                 /*Docker登录、镜像构建、push到私服、运行容器*/
                 sh '''
-                    docker login -u kevin -p kevin 10.1.18.202:5000
+                    docker login -u admin -p chenfeng1982 localhost:5000
                     cd ${BUILD_DIR};
                     pwd;
-                    docker build -t 10.1.18.202:5000/${IMG}:${VER} .
-                    docker push 10.1.18.202:5000/${IMG}:${VER}
-                    docker logout 10.1.18.202:5000
+                    docker build -t localhost:5000/${IMG}:${VER} .
+                    docker push localhost:5000/${IMG}:${VER}
+                    docker logout localhost:5000
                     docker rm -f ${IMG}
                     docker run --name ${IMG} -p 8080:8080 -d 10.1.18.202:5000/${IMG}:${VER}
                 '''
